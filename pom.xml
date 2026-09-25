@@ -54,9 +54,18 @@
 			Maven. -->
 		<debugHermiT>false</debugHermiT>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Keep the default build on a published release until Protege 6 artifacts are available. -->
+		<protege.version>5.6.6</protege.version>
 	</properties>
 
 	<profiles>
+		<profile>
+			<id>protege6</id>
+			<!-- Activate after installing the current Protege 6 build locally. -->
+			<properties>
+				<protege.version>6.0.0-alpha-1-SNAPSHOT</protege.version>
+			</properties>
+		</profile>
 		<profile>
 			<id>release</id>
 			<activation>
@@ -210,8 +219,7 @@
 							javax.xml.stream.*,
 							!org.codehaus.*,
 							!org.jaxen*,
-							org.protege.editor.owl.*;version="4.3",
-							<!-- equivalent to [4.3,infinity) -->
+							org.protege.editor.owl.*;version="[6,7)",
 							*
 						</Import-Package>
 					</instructions>
@@ -278,8 +286,8 @@
 		</dependency>
 		<dependency>
 			<groupId>edu.stanford.protege</groupId>
-			<artifactId>org.protege.editor.owl</artifactId>
-			<version>4.3.0</version>
+			<artifactId>protege-editor-owl</artifactId>
+			<version>${protege.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
