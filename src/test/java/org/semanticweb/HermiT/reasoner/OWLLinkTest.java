@@ -278,9 +278,8 @@ public class OWLLinkTest extends AbstractReasonerTest {
         // Test 8 tests the open world assumption., <rdf:Description
         // about="&prem;I"> should have rdf:about (fixed locally)
         // Tests 9 to 10b test property filler merging.
-        // Test 11 is a combined syntax/special test case. It checks whether the
-        // systems handle empty
-        // unions, intersections, or enumerations logically correctly.
+        // Test 11 is not run because its empty unions, intersections, and
+        // enumerations are legacy OWL 1 constructs that are not valid in OWL 2.
         // Test 12 not tested in the Bob paper, I can't see why the entailment
         // should follow
         // Test 13 tests individual merging.
@@ -315,7 +314,7 @@ public class OWLLinkTest extends AbstractReasonerTest {
 
         // "1b", "2b" removed because HermiT has timeouts
 
-        String[] tests = new String[] { "1a", "2a", "2c", "3a", "3b", "4", "5", "6", "7", "8", "9", "10a", "10b", "11",
+        String[] tests = new String[] { "1a", "2a", "2c", "3a", "3b", "4", "5", "6", "7", "8", "9", "10a", "10b",
                 "13", "14", "15", "16", "17", "18", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29a" };
 
         for (String testName : tests) {
