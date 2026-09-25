@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the source
+        uses: actions/checkout@v4
+      - name: Set up Java and Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      # The verify lifecycle runs the complete test suite and packages the
+      # reasoner as an OSGi bundle against the published Protégé 6 snapshot.
+      - name: Build and test
+        run: mvn --batch-mode -Pprotege6 clean verify

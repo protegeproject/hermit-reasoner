@@ -1,5 +1,7 @@
 # HermiT
 
+[![Build](https://github.com/protegeproject/hermit-reasoner/actions/workflows/build.yml/badge.svg)](https://github.com/protegeproject/hermit-reasoner/actions/workflows/build.yml)
+
 HermiT is a conformant OWL 2 DL reasoner that uses the direct semantics. It
 supports all OWL 2 DL constructs and the datatypes required by the OWL 2
 specification.
