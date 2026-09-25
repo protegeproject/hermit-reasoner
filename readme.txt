@@ -47,14 +47,9 @@ HermiT uses the following libraries in unmodified form:
    commons-logging.LICENSE in project/lib or in the Protege 
    plug-in jar file
 
-The release is organised as follows:
-HermiT.jar is a stand-alone version of HermiT that can be used from the command 
-line or from within other Java programs. It contains all required libraries.
-org.semanticweb.HermiT.jar is a plug-in for Protege version 4.1. It can be copied 
-into the plugins folder of Protege. 
-project/* is the Java Eclipse project for HermiT. It contains all sources 
-(folders src, test, examples, and getopt) and libraries (folder lib) incl. sources 
-and can directly be imported into Eclipse.  
+The Maven build produces hermit-reasoner-<version>.jar. It can be used from the
+command line, as a library in other Java programs, or as a plug-in for Protégé 6.
+The source tree contains the HermiT implementation, tests, and examples.
 
 HermiT 1.0 
 - supports all of OWL 2
@@ -155,5 +150,3 @@ HermiT 1.3.7
 HermiT 1.3.8
 - Fixed a bug where we ignored declared classes/properties after an incremental change. 
   Fixed array index out of bound error for empty property chains.
-  
-  

@@ -15,26 +15,21 @@
 		<version>7</version>
 	</parent>
 
-	<!-- USAGE: `mvn compile` to compile main sources. `mvn test` to compile 
-		all tests and run AllQuickTests. `mvn -PallTests test` to compile all tests 
-		and run AllTests. `mvn package` to assemble the Protege plugin, the standalone 
-		CLI with all dependencies, and the source code package. `mvn install` to 
-		run all the preceeding tasks, and to generate a standalone HermiT library 
-		without dependencies. This will also generate the JUnit reports and attempt 
-		to SCP the build results to linux.cs.ox.ac.uk. -->
+	<!-- USAGE: `mvn compile` compiles the main sources, `mvn test` runs the tests,
+		`mvn package` builds the HermiT bundle and supporting artifacts, and
+		`mvn install` installs them in the local Maven repository. -->
 
-	<groupId>net.sourceforge.owlapi</groupId>
-	<artifactId>org.semanticweb.hermit</artifactId>
-	<version>1.4.6.519-SNAPSHOT</version>
+	<groupId>edu.stanford.protege</groupId>
+	<artifactId>hermit-reasoner</artifactId>
+	<version>1.5.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<name>HermiT</name>
 	<url>http://hermit-reasoner.com/</url>
-	<description>HermiT is reasoner for ontologies written using the Web Ontology Language (OWL). Given an OWL file, HermiT can determine whether or not the ontology is consistent, identify subsumption relationships between classes, and much more.
-	This is the maven build of HermiT and is designed for people who wish to use HermiT from within the OWL API. It is now versioned in the main HermiT version repository, although not officially supported by the HermiT developers.
-	The version number of this package is a composite of the HermiT version and a value representing the OWLAPI release it is compatible with. Note that the group id for the upstream HermiT is com.hermit-reasoner, while this fork is released under net.sourceforge.owlapi.
-	This fork exists to allow HermiT users to use newer OWLAPI versions than the ones supported by the original HermiT codebase.
-	This package includes the Jautomata library (http://jautomata.sourceforge.net/), and builds with it directly. This library appears to be no longer under active development, and so a &quot;fork&quot; seems appropriate. No development is intended or anticipated on this code base.</description>
+	<description>HermiT is an OWL 2 reasoner that can determine whether an ontology is consistent, classify classes and properties, and realize individuals.
+	HermiT was originally developed by Boris Motik, Birte Glimm, Rob Shearer, Giorgos Stoilos, and Ian Horrocks at the Department of Computer Science of the University of Oxford.
+	This repository is maintained by the Protégé project to provide HermiT builds for current OWL API and Protégé releases.
+	This package includes the JAutomata library (http://jautomata.sourceforge.net/) and builds it directly because that project is no longer actively maintained.</description>
 
 	<licenses>
 		<license>
@@ -46,7 +41,7 @@
 	<properties>
 		<!-- General info. -->
 		<homepage>http://hermit-reasoner.com/</homepage>
-		<updatefile>PUT ON GITHUB/update.properties</updatefile>
+		<updatefile>https://raw.githubusercontent.com/protegeproject/hermit-reasoner/main/update.properties</updatefile>
 		<mainClass>org.semanticweb.HermiT.cli.CommandLine</mainClass>
 		<!-- structure of output files -->
 		<reportsDirectory>${project.build.directory}/junit-reports</reportsDirectory>
@@ -184,17 +179,15 @@
 					<instructions>
 						<Main-Class>org.semanticweb.HermiT.cli.CommandLine</Main-Class>
 						<Implementation-Title>${project.name}</Implementation-Title>
-						<Implementation-Vendor>Oxford University, wrapped by the OWLAPI
-							Team</Implementation-Vendor>
+						<Implementation-Vendor>Protégé project (originally developed by the HermiT team at the University of Oxford)</Implementation-Vendor>
 						<Implementation-Version>${project.version}.${maven.build.timestamp}</Implementation-Version>
 						<Build-Date>${timestamp}</Build-Date>
 						<Bundle-Name>HermiT Reasoner</Bundle-Name>
 						<Bundle-Category>protege</Bundle-Category>
 						<Bundle-Description>An OWL 2 reasoner</Bundle-Description>
 						<Bundle-DocURL>${homepage}</Bundle-DocURL>
-						<Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
-						<Bundle-Vendor>Boris Motik, Birte Glimm, Giorgos Stoilos, and Ian
-							Horrocks, wrapped by the OWLAPI Team</Bundle-Vendor>
+						<Bundle-SymbolicName>org.semanticweb.hermit;singleton:=true</Bundle-SymbolicName>
+						<Bundle-Vendor>Protégé project (originally developed by Boris Motik, Birte Glimm, Rob Shearer, Giorgos Stoilos, and Ian Horrocks at the University of Oxford)</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Update-Url>${updatefile}</Update-Url>
 						<Embed-Transitive>true</Embed-Transitive>
@@ -348,9 +341,9 @@
 
 
 	<scm>
-		<connection>scm:git:git@github.com:phillord/hermit-reasoner.git</connection>
-		<developerConnection>scm:git:git@github.com:phillord/hermit-reasoner.git</developerConnection>
-		<url>git@github.com:phillord/hermit-reasoner.git</url>
+		<connection>scm:git:https://github.com/protegeproject/hermit-reasoner.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/protegeproject/hermit-reasoner.git</developerConnection>
+		<url>https://github.com/protegeproject/hermit-reasoner</url>
 	</scm>
 
 </project>
