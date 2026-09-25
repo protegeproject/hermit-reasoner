@@ -3,8 +3,6 @@ package org.semanticweb.HermiT.structural;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -167,23 +165,11 @@ public class NormalizationTest extends AbstractStructuralTest {
     }
 
     public void testKeys2() throws Exception {
-        Set<String> normalizedAxiomsStrings = getNormalizedAxiomsString(
-                "HasKey(ObjectIntersectionOf(:A :B) (:r) (:dp))");
-        Set<String> control1 = new TreeSet<>();
-        control1.add("SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "A> ObjectComplementOf(<internal:def#a0>)))");
-        control1.add("SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "B> ObjectComplementOf(<internal:def#a0>)))");
-        control1.add("HasKey(<internal:def#a0> (<" + NS + "r> ) (<file:/c/test.owl#dp> ))");
-        Set<String> control2 = new HashSet<>();
-        control2.add("SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "B> ObjectComplementOf(<internal:def#a0>)))");
-        control2.add("SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "A> ObjectComplementOf(<internal:def#a0>)))");
-        control2.add("HasKey(<internal:def#a0> (<" + NS + "r> ) (<file:/c/test.owl#dp> ))");
-        if (!normalizedAxiomsStrings.equals(control1) && !normalizedAxiomsStrings.equals(control2))
-            if(!normalizedAxiomsStrings.equals(control1)) {
-                assertEquals( control1.stream().collect(Collectors.joining("\n")),normalizedAxiomsStrings.stream().collect(Collectors.joining("\n")));
-            }
-        if(!normalizedAxiomsStrings.equals(control2)) {
-            assertEquals(control2.stream().collect(Collectors.joining("\n")),normalizedAxiomsStrings.stream().collect(Collectors.joining("\n")));
-        }
+        assertNormalization(
+                "HasKey(ObjectIntersectionOf(:A :B) (:r) (:dp))",
+                "SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "A> ObjectComplementOf(<internal:def#a0>)))",
+                "SubClassOf(owl:Thing ObjectUnionOf(<" + NS + "B> ObjectComplementOf(<internal:def#a0>)))",
+                "HasKey(<internal:def#a0> (<" + NS + "r>) (<" + NS + "dp>))");
     }
 
     public void testTopObjectPropertyInSuperPosition() throws Exception {
@@ -214,17 +200,14 @@ public class NormalizationTest extends AbstractStructuralTest {
         return axioms;
     }
 
-    protected Set<String> getNormalizedAxiomsString(String axiomsString) throws Exception {
+    protected void assertNormalization(String axiomsString, String... expectedAxiomsString) throws Exception {
         loadOntologyWithAxioms(axiomsString);
         Set<OWLAxiom> normalizedAxioms = getNormalizedAxioms();
-        Set<String> normalizedAxiomsString = new TreeSet<>();
-        for (OWLAxiom axiom : normalizedAxioms)
-            normalizedAxiomsString.add(axiom.toString());
-        return normalizedAxiomsString;
-    }
 
-    protected void assertNormalization(String axiomsString, String... expectedAxiomsString) throws Exception {
-        Set<String> normalizedAxiomsString = getNormalizedAxiomsString(axiomsString);
-        assertContainsAll(normalizedAxiomsString, expectedAxiomsString);
+        m_ontologyManager.removeOntology(m_ontology);
+        loadOntologyWithAxioms(String.join(" ",expectedAxiomsString));
+        Set<OWLAxiom> expectedAxioms = m_ontology.getAxioms();
+
+        assertContainsAll(getName(),normalizedAxioms,expectedAxioms);
     }
 }
