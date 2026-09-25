@@ -1,0 +1,79 @@
+name: Publish packages to the Maven Central Repository
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Maven Central versions must match the release tag exactly. Reject a
+      # leading "v" and other tag formats before using publishing credentials.
+      - if: github.event_name == 'release'
+        name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [[ ! "$RELEASE_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]]; then
+            echo "::error::Release tag '$RELEASE_TAG' must be a Maven version such as '1.5.0' or '1.5.0-alpha-1' (without a 'v' prefix)."
+            exit 1
+          fi
+      - name: Set up JDK/Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          server-id: ossrh
+          server-username: OSSRH_USERNAME
+          server-password: OSSRH_TOKEN
+          gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+          gpg-passphrase: GPG_PASSPHRASE
+      - if: github.event_name == 'release'
+        name: Update version in pom.xml (Release only)
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+        run: mvn -B versions:set -DnewVersion="$RELEASE_VERSION" -DgenerateBackupPoms=false
+      # The release profile signs the artifacts and hands them to the Maven
+      # Central publishing extension. Manual runs publish the current snapshot.
+      - name: Publish packages
+        run: mvn --batch-mode -Pprotege6,release deploy
+      # A release tag is the source of truth for the Protégé auto-update file.
+      # Update main only after Central has accepted and published the artifacts.
+      - if: github.event_name == 'release'
+        name: Check out main for the auto-update metadata
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: release-metadata
+      - if: github.event_name == 'release'
+        name: Update the auto-update metadata
+        working-directory: release-metadata
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+        run: |
+          perl -pi -e '
+            s{^version=.*}{version=$ENV{RELEASE_VERSION}};
+            s{^download=.*}{download=https://repo1.maven.org/maven2/edu/stanford/protege/hermit-reasoner/$ENV{RELEASE_VERSION}/hermit-reasoner-$ENV{RELEASE_VERSION}.jar};
+            s{^readme=.*}{readme=https://github.com/$ENV{GITHUB_REPOSITORY}/releases/tag/$ENV{RELEASE_VERSION}};
+          ' update.properties
+
+          if git diff --quiet -- update.properties; then
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add update.properties
+          git commit -m "Update auto-update metadata for $RELEASE_VERSION"
+          git push origin main
+
+env:
+  GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
+  OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
+  OSSRH_TOKEN: ${{secrets.OSSRH_TOKEN}}
