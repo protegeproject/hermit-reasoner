@@ -25,6 +25,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       # The verify lifecycle runs the complete test suite and packages the
-      # reasoner as an OSGi bundle against the published Protégé 6 snapshot.
+      # reasoner as an OSGi bundle against the published Protégé 6 release.
       - name: Build and test
-        run: mvn --batch-mode -Pprotege6 clean verify
+        run: mvn --batch-mode clean verify

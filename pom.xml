@@ -74,18 +74,11 @@
 			Maven. -->
 		<debugHermiT>false</debugHermiT>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- Keep the default build on a published release until Protege 6 artifacts are available. -->
-		<protege.version>5.6.6</protege.version>
+		<!-- Protégé version used by the plugin integration. -->
+		<protege.version>6.0.0-alpha-1</protege.version>
 	</properties>
 
 	<profiles>
-		<profile>
-			<id>protege6</id>
-			<!-- Activate after installing the current Protege 6 build locally. -->
-			<properties>
-				<protege.version>6.0.0-alpha-1-SNAPSHOT</protege.version>
-			</properties>
-		</profile>
 		<profile>
 			<id>release</id>
 			<build>

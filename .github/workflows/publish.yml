@@ -42,7 +42,7 @@ jobs:
       # The release profile signs the artifacts and hands them to the Maven
       # Central publishing extension. Manual runs publish the current snapshot.
       - name: Publish packages
-        run: mvn --batch-mode -Pprotege6,release deploy
+        run: mvn --batch-mode --activate-profiles release deploy
       # A release tag is the source of truth for the Protégé auto-update file.
       # Update main only after Central has accepted and published the artifacts.
       - if: github.event_name == 'release'
