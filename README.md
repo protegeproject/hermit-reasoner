@@ -55,8 +55,8 @@ The source tree contains the HermiT implementation, tests, and examples.
 Releases are published to Maven Central by the GitHub Actions publishing
 workflow. Before creating a release:
 
-1. Make sure the Protégé dependency in the `protege6` Maven profile refers to a
-   published, non-SNAPSHOT Protégé 6 release.
+1. Make sure the Protégé dependency in `pom.xml` refers to a published,
+   non-SNAPSHOT Protégé 6 release.
 2. Run the full test suite and merge the release changes into `main`.
 3. Create and publish a GitHub release from the intended commit. Use the Maven
    version as the tag, for example `1.5.0`, without a `v` prefix.
